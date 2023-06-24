@@ -1,0 +1,34 @@
+<.header>
+  Application <%= @application.id %>
+  <:subtitle>This is a application record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/applications/#{@application}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit application</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Company"><%= @application.company %></:item>
+  <:item title="Applied"><%= @application.applied %></:item>
+  <:item title="Status"><%= @application.status %></:item>
+  <:item title="Listing"><a href={@application.listing}>Listing Link</a></:item>
+</.list>
+
+<.back navigate={~p"/applications"}>Back to applications</.back>
+
+<.modal
+  :if={@live_action == :edit}
+  id="application-modal"
+  show
+  on_cancel={JS.patch(~p"/applications/#{@application}")}
+>
+  <.live_component
+    module={ApplicationTrackerWeb.ApplicationLive.FormComponent}
+    id={@application.id}
+    title={@page_title}
+    action={@live_action}
+    application={@application}
+    patch={~p"/applications/#{@application}"}
+  />
+</.modal>
